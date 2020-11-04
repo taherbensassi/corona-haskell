@@ -10,7 +10,9 @@
   
   Source: https://www.who.int/health-topics/coronavirus#tab=tab_1
   
-* With this project we provide all the information about corona.
+* With this project we provide all the information about corona this Api : 
+
+[Coronavirus COVID19 API] (https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest) 
 
 
 
@@ -59,5 +61,6 @@ stack run
 [Taher Ben Sassi](mailto:taher.sassi.isamm@gmail.com)
 
 
+###### !!! Beginner lvl in Haskell, so i would be happy to get any feedback for improvement  
 
 
