@@ -1,1 +1,1 @@
-A simple project with Haskell 
+# haskell-corona-app

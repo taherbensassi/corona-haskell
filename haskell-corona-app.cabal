@@ -1,0 +1,98 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 05a19a37f25960d09332800f5656ac0c3a06854dfa797d88f6a102b33cc8bc87
+
+name:           haskell-corona-app
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/haskell-corona-app#readme>
+homepage:       https://github.com/githubuser/haskell-corona-app#readme
+bug-reports:    https://github.com/githubuser/haskell-corona-app/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2020 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/haskell-corona-app
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_haskell_corona_app
+  hs-source-dirs:
+      src
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , directory
+    , generic-deriving
+    , hashmap
+    , http-conduit
+    , lens
+    , lens-aeson
+    , open-browser
+    , text
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
+
+executable haskell-corona-app-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_corona_app
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , directory
+    , generic-deriving
+    , hashmap
+    , haskell-corona-app
+    , http-conduit
+    , lens
+    , lens-aeson
+    , open-browser
+    , text
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
+
+test-suite haskell-corona-app-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_haskell_corona_app
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , directory
+    , generic-deriving
+    , hashmap
+    , haskell-corona-app
+    , http-conduit
+    , lens
+    , lens-aeson
+    , open-browser
+    , text
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
