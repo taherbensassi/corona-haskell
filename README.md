@@ -54,6 +54,9 @@ stack run
   <tr>    
   <td>  <img src="img/haskell-project-taher-ben-sassi.png"    alt="taher-ben-sassi-haskell-project-corona"/>  </td>
   </tr>
+  <tr>    
+    <td>  <img src="img/haskell-project-taher-ben-sassi-2.png"    alt="taher-ben-sassi-haskell-project-corona"/>  </td>
+  </tr>
 </table>
 
 ## Author
