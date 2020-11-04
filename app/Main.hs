@@ -106,7 +106,7 @@ saveListCountry file listCountry  = do
 
 ------- 1 -------
 myhead :: [a] -> a
-myhead [] = error "Leere Liste!"
+myhead [] = error "Empty!"
 myhead (x:xs) = x
 
 getString :: Value -> Maybe String
@@ -204,48 +204,43 @@ activeNumber (Just (_, _, _, _, v, _)) = v
 
 menu:: IO ()
 menu = do
-    putStrLn "\n  Gitlab: https://gitlab.beuth-hochschule.de/s79745/haskell-corona-app"
-    putStrLn "\n--------------- Anleitung  ---------------"
+    putStrLn "\n--------------- Welcome  ---------------"
     -- Menu
-    putStrLn "1 - Über Projekt"
+    putStrLn "1 - About the project"
     putStrLn "2 - Api- Coronavirus COVID19 API Documentation"
 
     putStrLn "\n------------ Projekt  --------------------"
-    putStrLn "3 - Zeigen Sie alle Länder, die von dem Virus betroffen sind und suchen Sie nur nach Länder"
-    putStrLn "4 - Zeigen eine Zusammenfassung der neuen und gesamten Fälle in der Welt, die täglich aktualisiert wird."
-    putStrLn "5 - Zeigen eine Zusammenfassung der neuen und gesamten Fälle pro Land, die täglich aktualisiert wird."
-    --putStrLn "6 - Suchen -bei Land Name- für eine Zusammenfassung der neuen und gesamten Fälle"
-    putStrLn "6 - Zeigen Sie alle Fälle (bestätigt,wieder gesund,Todesfälle) für ein Land ab dem ersten aufgezeichneten Fall an."
-    putStrLn "7 - Filter by einem bestimmten Datum alle Fälle (bestätigt,wieder gesund,Todesfälle) für ein Land ab dem ersten aufgezeichneten Fall an."
-    putStrLn "8 - Filter  Von - Bis Datum alle Fälle (bestätigt,wieder gesund,Todesfälle) für ein Land ab dem ersten aufgezeichneten Fall an."
+    putStrLn "3 - Show all countries affected by the virus and search for countries only"
+    putStrLn "4 - Show a summary of new and total cases in the world, updated daily."
+    putStrLn "5 - Show a summary of new and total cases per country, updated daily."
+    putStrLn "6 - Show all cases (confirmed,recovered,deaths) for a country from the first recorded case."
+    putStrLn "7 - Filter by a certain date all cases (confirmed,recovered,deaths) for a country from the first recorded case on."
+    putStrLn "8 - Filter From - To date all cases (confirmed,recovered,deaths) for a country from the first recorded case on"
     putStrLn "---------------------------------------------"
+    putStrLn "\n--------------- Autor: Taher ben sassi  ---------------"
     choice <- readLn
     case choice of
-    -- // Anleitung Start
-      0 -> do
-          -- Information about our Group
-          putStrLn "---------------------------------------------"
-          readFileFunc "documentation/team.txt"
+    -- //  Start
       1 -> do
           -- Information about our Group
           putStrLn "---------------------------------------------"
           readFileFunc "documentation/app.txt"
       2 -> do
-          putStrLn "Sind Sie sicher, dass Sie Ihren Browser öffnen möchten? (y/n)"
+          putStrLn "Are you sure you want to open your browser? (y/n)"
           choiceLink <- getChar
           case choiceLink of
              'y' -> do
                    -- Open a Link from Browser
                    openBrowser "https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest" >>= print
              'n' -> do
-                   putStrLn "Danke !"
-    -- // Anleitung End
+                   putStrLn "Thanks !"
+    -- // End
 
 
     -- // Projekt End
       3 -> do
-          putStrLn "1- Zeigen Sie alle Länder an, die vom Virus betroffen sind ?"
-          putStrLn "2- Prüfen ob bestimmte Land Betroffen ist?"
+          putStrLn "1- Show all countries affected by the virus ?"
+          putStrLn "2- Check if specific country is affected?"
           choiceCountry <- readLn
           jsonCountries <- baseApi  "https://api.covid19api.com/countries"
           {- Note [^..]
@@ -262,7 +257,7 @@ menu = do
             2 -> do
                 -- Information about our Group
                 putStrLn "---------------------------------------------"
-                putStrLn "Bitte geben Sie den Ländernamen ein! Auf English"
+                putStrLn "Please enter the country name! In English"
                 choiceCountry <- getLine
                  -- Solve Text problem --> String
                 let searchedCountry =  map (\x -> (elemIndices x  countries)) [String.fromString choiceCountry]
@@ -281,86 +276,86 @@ menu = do
                 -}
                 let message =
                       if  null (searchedCountry!!0)
-                      then "Das Land, das Sie gesucht haben, ist NICHT infiziert.  :D oder Das Land existiert nicht"
-                      else "Das Land, das Sie gesucht haben, ist leider infiziert. :( "
+                      then "The country you were looking for is NOT infected.  D or The country does not exist"
+                      else "The country you were looking for is unfortunately infected. :( "
                 print message
       4 -> do
           summaryVirusJson <- baseApi  "https://api.covid19api.com/summary"
-          putStrLn "0- Summary (All Information)"
-          putStrLn "1- Neue und alle bestätigte Fälle (Confimed)"
-          putStrLn "2- Neue und alle wieder gesund Fälle (Recoverd)"
-          putStrLn "3- Neue und alle Todesfälle Fälle (Death)"
+          putStrLn "0- Summary"
+          putStrLn "1- New and all confirmed cases (Confimed)"
+          putStrLn "2- New and all healthy cases (Recoverd)"
+          putStrLn "3- New and all death cases (Death)"
           choiceSummary <- readLn
           case choiceSummary of
               0 -> do
                    putStrLn "---------------------------------------------"
                    case getDate summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
+                       Nothing   -> putStrLn "Error - Empty "
                        Just date -> putStrLn ("Date: " ++  show date)
                    case getSummary "TotalConfirmed" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just totalConfirmed -> putStrLn ("Coronavirus-Fälle: " ++  show totalConfirmed)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just totalConfirmed -> putStrLn ("Coronavirus cases: " ++  show totalConfirmed)
                    case getSummary "NewConfirmed" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just newConfirmed -> putStrLn ("Neuinfektionen: + " ++  show newConfirmed)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just newConfirmed -> putStrLn ("New infections: + " ++  show newConfirmed)
 
                    case getSummary "NewRecovered"  summaryVirusJson  of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just newRecovered -> putStrLn ("Neue Wieder Gesund: + " ++  show newRecovered)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just newRecovered -> putStrLn ("New Healthy Again: + " ++  show newRecovered)
                    case getSummary "TotalRecovered" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just totalRecovered -> putStrLn ("Total Wieder Gesund :  " ++  show totalRecovered)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just totalRecovered -> putStrLn ("Totally Healthy Again :  " ++  show totalRecovered)
 
                    case getSummary "NewDeaths"  summaryVirusJson  of
-                        Nothing   -> putStrLn "Error - Leer "
-                        Just newDeaths -> putStrLn ("Neue Todesfälle: + " ++  show newDeaths)
+                        Nothing   -> putStrLn "Error - Empty "
+                        Just newDeaths -> putStrLn ("New deaths: + " ++  show newDeaths)
                    case getSummary "TotalDeaths" summaryVirusJson of
-                        Nothing   -> putStrLn "Error - Leer "
-                        Just totalDeaths -> putStrLn ("Total Todesfälle :  " ++  show totalDeaths)
+                        Nothing   -> putStrLn "Error - Empty "
+                        Just totalDeaths -> putStrLn ("Total deaths :  " ++  show totalDeaths)
 
               1 -> do
                    putStrLn "---------------------------------------------"
                    case getDate summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
+                       Nothing   -> putStrLn "Error - Empty "
                        Just date -> putStrLn ("Date: " ++  show date)
                    case getSummary "TotalConfirmed" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just totalConfirmed -> putStrLn ("Coronavirus-Fälle: " ++  show totalConfirmed)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just totalConfirmed -> putStrLn ("Coronavirus cases: " ++  show totalConfirmed)
                    case getSummary "NewConfirmed" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just newConfirmed -> putStrLn ("Neuinfektionen: + " ++  show newConfirmed)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just newConfirmed -> putStrLn ("New infections:: + " ++  show newConfirmed)
               2 -> do
                    putStrLn "---------------------------------------------"
                    case getDate summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
+                       Nothing   -> putStrLn "Error - Empty "
                        Just date -> putStrLn ("Date: " ++  show date)
 
                    case getSummary "NewRecovered"  summaryVirusJson  of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just newRecovered -> putStrLn ("Neue Wieder Gesund: + " ++  show newRecovered)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just newRecovered -> putStrLn ("New Healthy Again: + " ++  show newRecovered)
 
                    case getSummary "TotalRecovered" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just totalRecovered -> putStrLn ("Total Wieder Gesund : + " ++  show totalRecovered)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just totalRecovered -> putStrLn ("Totally Healthy Again : + " ++  show totalRecovered)
               3 -> do
                    putStrLn "---------------------------------------------"
                    case getDate summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
+                       Nothing   -> putStrLn "Error - Empty "
                        Just date -> putStrLn ("Date: " ++  show date)
 
                    case getSummary "NewDeaths"  summaryVirusJson  of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just newDeaths -> putStrLn ("Neue Todesfälle: + " ++  show newDeaths)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just newDeaths -> putStrLn ("New deaths: + " ++  show newDeaths)
 
                    case getSummary "TotalDeaths" summaryVirusJson of
-                       Nothing   -> putStrLn "Error - Leer "
-                       Just totalDeaths -> putStrLn ("Total Todesfälle : + " ++  show totalDeaths)
+                       Nothing   -> putStrLn "Error - Empty "
+                       Just totalDeaths -> putStrLn ("Total deaths : + " ++  show totalDeaths)
       5 -> do
           putStrLn "---------------------------------------------"
           summaryVirusJson <- baseApi  "https://api.covid19api.com/summary"
           putStrLn "---------------------------------------------"
           case getDate summaryVirusJson of
-               Nothing   -> putStrLn "Error - Leer "
+               Nothing   -> putStrLn "Error - Empty "
                Just date -> putStrLn ("Date: " ++  show date)
 
            -- // @toDo Fix Nothing Problem
@@ -374,17 +369,17 @@ menu = do
           let fileToAdd =  Data.List.tail $ Data.List.foldl (\x y -> x ++ "," ++ show y) "" listCountryLine
 
           putStrLn "---------------------------------------------"
-          putStrLn "Wollen Sie die Datei in file speichern (y/n)? "
+          putStrLn "Do you want to save the file to file (y/n)? "
           choiceFile <- getChar
           case choiceFile of
               'y' -> do
                     putStrLn "---------------------------------------------"
                     when (length countryList > 0) $
                         writeFile "data/summaryCountry.txt" fileToAdd
-                    putStrLn "Datei wird gespeichert !"
+                    putStrLn "File is saved !"
               'n' -> do
                     putStrLn "---------------------------------------------"
-                    putStrLn "Danke !"
+                    putStrLn "Thanks !"
 
       {-6 -> do
           putStrLn "---------------------------------------------"
@@ -406,7 +401,7 @@ menu = do
 
       6 -> do
          putStrLn "---------------------------------------------"
-         putStrLn "Bitte geben Sie den Ländernamen ein! Auf English "
+         putStrLn "Please enter the country name! In English "
          searchedCountry <- getLine
          let apiUrl = "https://api.covid19api.com/dayone/country/" ++ searchedCountry
 
@@ -427,7 +422,7 @@ menu = do
                                                     active c,
                                                     date c)) countries
 
-         putStrLn "('CountryName','Bestätigt','Todesfälle','Wieder gesund','Active','Date')"
+         putStrLn "('Country Name','Confirmed','Deaths','Healthy again','Active','Date')"
          putStrLn "------------------------------------------------------------------------"
          mapM_ print countryInfo
 
@@ -435,7 +430,7 @@ menu = do
          putStrLn "------------------------------------------------------------------------"
 
          --putStrLn "Filter by Date (von ---> bis)"
-         putStrLn "Wollen Sie die Datei in file speichern (y/n)? "
+         putStrLn "Do you want to save the file to file (y/n)? "
          choiceFile <- getChar
          case choiceFile of
                'y' -> do
@@ -444,17 +439,17 @@ menu = do
                     let fileName = "data/countries/country.txt"
                         -- // @toDo Fix new File Country
                     writeFile fileName  (show countryInfo)
-                    putStrLn "Die Datei wird geschrieben"
+                    putStrLn "File is saved !"
                'n' -> do
                     putStrLn "---------------------------------------------"
-                    putStrLn "Danke !"
+                    putStrLn "Thanks !"
 
       7 -> do
-          putStrLn "Bitte geben Sie den Ländernamen ein! Auf English "
+          putStrLn "Please enter the country name! In English "
           searchedCountry <- getLine
           let apiUrl = "https://api.covid19api.com/dayone/country/" ++ searchedCountry
           -- // @toDo Von-bis Filer
-          putStrLn "Bitte geben Sie das Datum ein ! Y-M-T beispeil 2020-03-04 "
+          putStrLn "Please enter the date ! Y-M-T example 2020-03-04 "
           startDate <- getLine
 
 
@@ -475,17 +470,17 @@ menu = do
           let seachedDateText = T.pack startDateTime
           let indexSearchedElement = map (\x -> (elemIndices x  countryDate)) [seachedDateText]
           let searchedByDate = countryInfo^? element (indexSearchedElement!!0!!0)
-          putStrLn "('CountryName','Bestätigt','Todesfälle','Wieder gesund','Active','Date')"
+          putStrLn "('Country Name','Confirmed','Deaths','Healthy again','Active','Date')"
           print searchedByDate
 
       8 -> do
-          putStrLn "Bitte geben Sie den Ländernamen ein! Auf English "
+          putStrLn "Please enter the country name! In English "
           searchedCountry <- getLine
           let apiUrl = "https://api.covid19api.com/dayone/country/" ++ searchedCountry
           -- // @toDo Von-bis Filer
-          putStrLn "Bitte geben Sie das Startdatum ein ! Format: y-m-t beispeil 2020-03-04 "
+          putStrLn "Please enter the start date ! Format: y-m-t example 2020-03-04 "
           startDate <- getLine
-          putStrLn "Bitte geben Sie das Enddatum ein ! Format: y-m-t beispeil 2020-03-04"
+          putStrLn "Please enter the end date ! Format: y-m-t example 2020-03-04"
           endDate <- getLine
 
           countryVirusJson <- baseApi (String.fromString apiUrl)
@@ -514,7 +509,7 @@ menu = do
           let indexSearchedElementEnd = map (\x -> (elemIndices x  countryDate)) [seachedendDateText]
           let endCoronaObject = countryInfo^? element (indexSearchedElementEnd!!0!!0)
 
-          putStrLn "('CountryName','Bestätigt','Todesfälle','Wieder gesund','Active','Date')"
+          putStrLn "('Country Name','Confirmed','Deaths','Healthy again','Active','Date')"
           --mapM_ print $ rangeCorona countryInfo (indexSearchedElementStart!!0!!0) (indexSearchedElementEnd!!0!!0)
 
           let rangeDays = (indexSearchedElementEnd!!0!!0-indexSearchedElementStart!!0!!0+1)
@@ -534,18 +529,18 @@ menu = do
           let diffRecovory = recovredEnd - recovredStart
           let diffActive = activeEnd - activeStart
 
-          putStrLn ("Von " ++ startDate ++ " Bis " ++ endDate ++ " Sind " ++ show rangeDays)
+          putStrLn ("From " ++ startDate ++ " to " ++ endDate ++ " are " ++ show rangeDays)
           mapM_ print $ rangeCorona countryInfo (indexSearchedElementStart!!0!!0) (indexSearchedElementEnd!!0!!0)
           putStrLn ("---------------------------------------------------------------------------")
-          putStrLn ("Am " ++ startDate ++ " Waren " ++ show confirmedStart ++ " Bestätigte Falle !! aber am " ++ endDate ++" Sind " ++ show confirmedEnd ++ " D.h: "  ++ show (fromEnum diffConfiremd) ++ "+" )
+          putStrLn ("On " ++ startDate ++ " was " ++ show confirmedStart ++ " Confirmed !! but on " ++ endDate ++" are " ++ show confirmedEnd ++ " D.h: "  ++ show (fromEnum diffConfiremd) ++ "+" )
           putStrLn ("---------------------------------------------------------------------------")
-          putStrLn ("Am " ++ startDate ++ " Waren " ++ show deathStart ++ " Todesfälle  !! aber am " ++ endDate ++" Sind " ++ show deathEnd ++ " D.h: "  ++ show (fromEnum diffDeath) ++ "+" )
+          putStrLn ("On " ++ startDate ++ " was " ++ show deathStart ++ " Deaths  !! but on " ++ endDate ++" are " ++ show deathEnd ++ " D.h: "  ++ show (fromEnum diffDeath) ++ "+" )
           putStrLn ("---------------------------------------------------------------------------")
-          putStrLn ("Am " ++ startDate ++ " Waren " ++ show recovredStart ++ " Wieder gesund  !! aber am " ++ endDate ++" Sind " ++ show recovredEnd  ++ " D.h: "  ++ show (fromEnum diffRecovory) ++ "+")
+          putStrLn ("On " ++ startDate ++ " was " ++ show recovredStart ++ " Healthy again  !! but on " ++ endDate ++" are " ++ show recovredEnd  ++ " D.h: "  ++ show (fromEnum diffRecovory) ++ "+")
           putStrLn ("---------------------------------------------------------------------------")
-          putStrLn ("Am " ++ startDate ++ " Waren " ++ show activeStart ++ " Active  Falle !! aber am " ++ endDate ++" Sind " ++ show activeEnd ++ " D.h: "  ++ show (fromEnum diffActive) ++ "+" )
+          putStrLn ("On " ++ startDate ++ " was " ++ show activeStart ++ " Active  !! but on " ++ endDate ++" are " ++ show activeEnd ++ " D.h: "  ++ show (fromEnum diffActive) ++ "+" )
       otherwise -> do
-          putStrLn "Bitte wählen Sie eine Nummer von 1 bis 6"
+          putStrLn "Please select a number from 1 to 6"
 -- Menu
 main :: IO ()
 main = do
